@@ -37,7 +37,7 @@
     }
 
     this.refresh = function () {
-      if ( this.is_loaded ) {
+      if (this.is_loaded) {
         for (var m = 0; m < this.maps.length; m++) {
           this.maps[m].init();
         };
@@ -48,17 +48,28 @@
   window.Fields.MapManager = window.Fields.MapManager || new MapManager();
 
   Place = function (field) {
+    // State
     this.is_active = false;
+
+    // Field Components
     this.field = $(field);
     this.container = this.field.parents('.field-place');
+    this.location_fields = {
+      address: this.container.find('.input-address'),
+      lat: this.container.find('.place-lat'),
+      lng: this.container.find('.place-lng')
+    };
+
+    // Google Maps Interface
     this.map_canvas = this.container.find('.field-google-map-ui');
     this.settings = {
       map: {
         center: {
-          lat: parseFloat(this.map_canvas.data('lat')),
-          lng: parseFloat(this.map_canvas.data('lng'))
+          lat: parseFloat(this.location_fields.lat.val() || this.map_canvas.data('lat')),
+          lng: parseFloat(this.location_fields.lng.val() || this.map_canvas.data('lng'))
         },
-        zoom: 6
+        disableDefaultUI: true,
+        zoom: this.map_canvas.data('zoom') || 6
       }
     };
   };
@@ -67,13 +78,68 @@
     init: function () {
       if ( !this.is_active ) {
         this.map = new google.maps.Map(this.map_canvas.get(0), this.settings.map);
+        this.geocoder = new google.maps.Geocoder();
+        this.pin = new google.maps.Marker({
+          position: new google.maps.LatLng(this.settings.map.center.lat, this.settings.map.center.lng),
+          map: this.map,
+          draggable: true
+        });
+        this.store();
         this.listen();
         console.log(this);
       }
       this.is_active = true;
     },
     listen: function () {
+      // Address Input
+      this.location_fields.address.on('keyup', (function (_place) {
+        return function (e) {
+          if (e.keyCode == 13) {
+            _place.geocode();
+          } else {
+            _place.store();
+          }
+        }
+      })(this));
 
+      this.container.find('.locate-button').on('click', (function (_place) {
+        return function (e) {
+          e.preventDefault();
+          _place.geocode();
+        }
+      })(this));
+      google.maps.event.addListener(this.pin, 'dragend', (function(_place) {
+        return function (e) {
+          console.log(e);
+          _place.geocode_result = _place.pin.getPosition();
+          _place.update_position();
+        }
+      })(this));
+    },
+    geocode: function () {
+      this.geocoder.geocode({'address': this.location_fields.address.val()}, (function (_place) {
+        return function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            _place.geocode_result = results[0].geometry.location;
+            _place.update_position();
+          } else {
+            alert('Sorry, the location couldn’t be found.' + status);
+            this.store();
+          }
+        }
+      })(this));
+    },
+    update_position: function () {
+      this.location_fields.lat.val(this.geocode_result.lat());
+      this.location_fields.lng.val(this.geocode_result.lng());
+      this.store();
+    },
+    store: function () {
+      this.field.val(JSON.stringify({
+        address: this.location_fields.address.val(),
+        lat: this.location_fields.lat.val(),
+        lng: this.location_fields.lng.val()
+      }));
     }
   }
 
@@ -88,22 +154,6 @@
     }
 
     window.Fields.MapManager.refresh();
-
-    /*
-    if ( $(document.body).hasClass('google-maps-loaded') ) {
-      this.each(function (index, el) {
-        var field = $(this);
-
-        if( field.data('map') ) {
-          return field.data('map');
-        } else {
-          var map = new window.Fields.Place(field);
-          field.data('map', map);
-          return map;
-        }
-      });
-    }
-    */
   };
 
 })(jQuery);
