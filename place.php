@@ -4,17 +4,15 @@
     $this->icon = 'map-marker';
     $this->label = l::get('fields.place.label', 'Place');
     $this->placeholder = l::get('fields.place.placeholder', 'Address or Location');
-    $this->js_api = 'https://maps.googleapis.com/maps/api/js';
     $this->default_location = array(
-      'lat' => 0,
-      'lng' => 0
+      'lat' => 43.9,
+      'lng' => -120.2291901
     );
   }
 
   static public $assets = array(
     'js' => array(
-      'place.js',
-      'https://maps.googleapis.com/maps/api/js'
+      'place.js'
     ),
     'css' => array(
       'place.css'
@@ -24,7 +22,7 @@
   public function input () {
     $input = parent::input();
     $input->data('field', 'mapField');
-    $input->attr('name', 'location[address]');
+    // $input->attr('name', 'location[address]');
     return $input;
   }
 
@@ -37,7 +35,6 @@
     $field->append($this->map());
     $field->append($this->input_lat());
     $field->append($this->input_lng());
-    // $field->append(js($this->js_api));
 
     # Concatenate & Return
     return $field;
@@ -80,7 +77,7 @@
     $lat_input->addClass('place-lat');
     $lat_input->attr('tabindex', '-1');
     $lat_input->attr('readonly', true);
-    $lat_input->attr('name', 'location[lat]');
+    // $lat_input->attr('name', 'location[lat]');
     $lat_input->addClass('input input-split-left input-is-readonly');
 
     $lat_content->append($lat_input);
@@ -97,7 +94,7 @@
     $lng_input->addClass('place-lng');
     $lng_input->attr('tabindex', '-1');
     $lng_input->attr('readonly', true);
-    $lng_input->attr('name', 'location[lng]');
+    // $lng_input->attr('name', 'location[lng]');
     $lng_input->addClass('input input-split-right input-is-readonly');
 
     $lng_content->append($lng_input);
