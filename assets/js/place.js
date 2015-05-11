@@ -92,9 +92,12 @@
     },
     listen: function () {
       // Address Input
-      this.location_fields.address.on('keyup', (function (_place) {
+      this.location_fields.address.on('keydown', (function (_place) {
         return function (e) {
+          
           if (e.keyCode == 13) {
+            e.preventDefault();
+            e.stopPropagation();
             _place.geocode();
           } else {
             _place.store();
@@ -104,7 +107,6 @@
 
       this.container.find('.locate-button').on('click', (function (_place) {
         return function (e) {
-          e.preventDefault();
           _place.geocode();
         }
       })(this));
@@ -123,8 +125,8 @@
             _place.geocode_result = results[0].geometry.location;
             _place.update_position();
           } else {
-            alert('Sorry, the location couldn’t be found.' + status);
-            this.store();
+            alert('Sorry, the location couldn’t be found.');
+            _place.store();
           }
         }
       })(this));
@@ -132,6 +134,8 @@
     update_position: function () {
       this.location_fields.lat.val(this.geocode_result.lat());
       this.location_fields.lng.val(this.geocode_result.lng());
+      this.pin.setPosition(this.geocode_result);
+      this.map.panTo(this.geocode_result);
       this.store();
     },
     store: function () {
