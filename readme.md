@@ -2,7 +2,7 @@
 
 > Please be aware that this field plugin is under development and is not recommended for use in production environments. Breaking changes are expected to be made to the way it saves and restores data.
 
-I've found that adding location data to [http://getkirby.com](Kirby CMS) forms to be super useful.
+I've found that adding location data to [Kirby CMS](http://getkirby.com) forms to be super useful.
 
 Unfortunately, this isn't one of the many fields available to us, out of the box.
 
@@ -28,4 +28,4 @@ git clone git@github.com:AugustMiller/kirby-place-field.git site/fields/place
 
 It's important that the folder be named `place`, because kirby looks for the field class's definition in a PHP file with the same name as the folder.
 
-You can also directly [https://github.com/AugustMiller/kirby-place-field/archive/master.zip](download) an archive of the current project state, rename the folder to `place`, and add it to the `site/fields` folder of your project.
+You can also directly [download](https://github.com/AugustMiller/kirby-place-field/archive/master.zip) an archive of the current project state, rename the folder to `place`, and add it to the `site/fields` folder of your project.
