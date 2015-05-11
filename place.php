@@ -4,11 +4,15 @@
     $this->icon = 'map-marker';
     $this->label = l::get('fields.place.label', 'Place');
     $this->placeholder = l::get('fields.place.placeholder', 'Address or Location');
-    $this->default_location = array_merge(array(
+    $this->map_settings = array(
       'lat' => c::get('place.defaults.lat', 43.9),
       'lng' => c::get('place.defaults.lng', -120.2291901),
       'zoom' => c::get('place.defaults.zoom', 1)
-    ), (array)$this->center);
+    );
+
+    if (isset($this->center)) {
+      $this->map_settings = array_merge($this->map_settings, (array)$this->center);
+    }
   }
 
   static public $assets = array(
@@ -55,7 +59,7 @@
     $location_input = new Brick('input');
     $location_input->addClass('input input-address');
     $location_input->attr('placeholder', $this->placeholder);
-    $location_input->val($this->value()->address);
+    $location_input->val($this->pick('address'));
 
     # Combine & Ship It
     $location_container->append($location_input);
@@ -93,8 +97,8 @@
     $lat_input->attr('tabindex', '-1');
     $lat_input->attr('readonly', true);
     $lat_input->addClass('input input-split-left input-is-readonly place-lat');
-    $lat_input->attr('placeholder', l::get('fields.place.placeholder', 'Latitude'));
-    $lat_input->val($this->value()->lat);
+    $lat_input->attr('placeholder', l::get('fields.place.latitude', 'Latitude'));
+    $lat_input->val($this->pick('lat'));
 
     # Combine & Ship It
     $lat_content->append($lat_input);
@@ -113,8 +117,8 @@
     $lng_input->attr('tabindex', '-1');
     $lng_input->attr('readonly', true);
     $lng_input->addClass('input input-split-right input-is-readonly place-lng');
-    $lng_input->attr('placeholder', l::get('fields.place.placeholder', 'Longitude'));
-    $lng_input->val($this->value()->lng);
+    $lng_input->attr('placeholder', l::get('fields.place.longitude', 'Longitude'));
+    $lng_input->val($this->pick('lng'));
 
     # Combine & Ship It
     $lng_content->append($lng_input);
@@ -127,7 +131,7 @@
     # Wrapper
     $map_content = new Brick('div');
     $map_content->addClass('field-content field-google-map-ui');
-    $map_content->data($this->default_location);
+    $map_content->data($this->map_settings);
 
     return $map_content;
   }
@@ -149,10 +153,18 @@
     return $serialized_content;
   }
 
+  public function pick ($key = null) {
+    $data = $this->value();
+    if ( $key && isset($data[$key]) ) {
+      return $data[$key];
+    } else {
+      return null;
+    }
+  }
 
   public function value() {
     # Convert JSON String to Array
-    return json_decode($this->value);
+    return (array)json_decode($this->value);
   }
 
   public function result() {
