@@ -5,9 +5,9 @@
     $this->label = l::get('fields.place.label', 'Place');
     $this->placeholder = l::get('fields.place.placeholder', 'Address or Location');
     $this->default_location = array_merge(array(
-      'lat' => 43.9,
-      'lng' => -120.2291901,
-      'zoom' => 1
+      'lat' => c::get('place.defaults.lat', 43.9),
+      'lng' => c::get('place.defaults.lng', -120.2291901),
+      'zoom' => c::get('place.defaults.zoom', 1)
     ), (array)$this->center);
   }
 
