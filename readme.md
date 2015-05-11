@@ -29,3 +29,30 @@ git clone git@github.com:AugustMiller/kirby-place-field.git site/fields/place
 It's important that the folder be named `place`, because kirby looks for the field class's definition in a PHP file with the same name as the folder.
 
 You can also directly [download](https://github.com/AugustMiller/kirby-place-field/archive/master.zip) an archive of the current project state, rename the folder to `place`, and add it to the `site/fields` folder of your project.
+
+Once you've added the plugin, you can add a location field to your blueprints, like this:
+
+```yml
+fields:
+  location:
+    label: Location
+    type: place
+    center:
+      lat: 45.5230622
+      lng: -122.67648159999999
+      zoom: 9
+    help: >
+      Move the pin wherever you'd like, or search for a location!
+```
+
+The (poorly-named) `center` key allows you to customize the initial position and zoom level of the map interface.
+
+You can also set global defaults, in your `config.php`:
+
+```php
+c::set('place.defaults.lat', 45.5230622);
+c::set('place.defaults.lng', -122.67648159999999);
+c::set('place.defaults.zoom', 9);
+```
+
+These options will be overridden by any set on individual fields. Without either configured, it will default to hard-coded values.
