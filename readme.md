@@ -58,3 +58,16 @@ c::set('place.defaults.zoom', 9);
 ```
 
 These options will be overridden by any set on individual fields. Without either configured, it will default to hard-coded values.
+
+## Usage
+
+Field data is stored in JSON, and is retrievable by using PHP's built-in `json_decode()` function. You can inject this anywhere— try it in a `data-*` attribute to populate a map of your own, in a template!
+
+```php
+$location = json_decode($page->field_name());
+echo $location['address'];
+echo $location['lat'];
+echo $location['lng'];
+```
+
+Independently, I'll provide a [field method](http://getkirby.com/docs/cheatsheet#field-methods), to decode and grab a single member, like `$page->field_name()->location('lat')` or `$page->field_name()->location('address')`.
