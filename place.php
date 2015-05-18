@@ -26,7 +26,7 @@
 
   public function content () {
     $field = new Brick('div');
-    $field->addClass('field-multipart field-place');
+    $field->addClass('field-multipart field-place cf');
 
     # Add each
     $field->append($this->input_location());
