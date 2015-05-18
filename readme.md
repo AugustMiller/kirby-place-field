@@ -16,6 +16,8 @@ Unfortunately, this isn't one of the many fields available to us, out of the box
 - Easy to implement (See "Getting Started", below)
 - Customizable default position and zoom— globally and on a per-field basis
 
+![Kirby Place Field Screenshot](https://github.com/AugustMiller/kirby-place-field/raw/master/screenshot.png)
+
 ## Getting Started
 If you like the command line, adding this to your project is super easy.
 
@@ -57,7 +59,7 @@ c::set('place.defaults.zoom', 9);
 
 These options will be overridden by any set on individual fields. Without either configured, it will default to hard-coded values.
 
-## Accessing Saved Data
+## Usage
 
 The Place Field stores data in JSON.
 
