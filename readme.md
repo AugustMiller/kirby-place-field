@@ -1,6 +1,6 @@
 # Place Field
 
-> Please be aware that this field plugin is under development and is not recommended for use in production environments. Breaking changes are expected to be made to the way it saves and restores data.
+> Please be aware that this field plugin is under development and is not recommended for use in production environments. Breaking changes may be made to the way it saves and restores data.
 
 I've found that adding location data to [Kirby CMS](http://getkirby.com) forms to be super useful.
 
@@ -23,7 +23,7 @@ Be sure you have a `fields` folder in your `site` folder, then:
 
 ```sh
 cd /path/to/your/project
-git clone git@github.com:AugustMiller/kirby-place-field.git site/fields/place
+git submodule add git@github.com:AugustMiller/kirby-place-field.git site/fields/place
 ```
 
 It's important that the folder be named `place`, because kirby looks for the field class's definition in a PHP file with the same name as the folder.
@@ -45,7 +45,7 @@ fields:
       Move the pin wherever you'd like, or search for a location!
 ```
 
-The (poorly-named) `center` key allows you to customize the initial position and zoom level of the map interface.
+The `center` key allows you to customize the initial position and zoom level of the map interface.
 
 You can also set global defaults, in your `config.php`:
 
@@ -56,3 +56,17 @@ c::set('place.defaults.zoom', 9);
 ```
 
 These options will be overridden by any set on individual fields. Without either configured, it will default to hard-coded values.
+
+## Accessing Saved Data
+
+The Place Field stores data in JSON.
+
+You can manually cast the field to a string (`(string)$page->location()`), then use PHP's `json_decode()` function to return an associative array.
+
+I've also written a [custom `json` field method](https://gist.github.com/AugustMiller/2c3fe124d272541ff353) to handle decoding in a more automatic fashion. With the field method added to `site/plugins`, you can retrieve pieces of place data like this:
+
+```php
+$page->location->json('address');
+```
+
+Properties `address`, `lat` and `lng` exist in the decoded JSON object. If no property is passed to the field method, an associative array is returned, with all three elements.
