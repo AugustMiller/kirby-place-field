@@ -9,10 +9,6 @@
       'lng' => c::get('place.defaults.lng', -120.2291901),
       'zoom' => c::get('place.defaults.zoom', 1)
     );
-
-    if (isset($this->center)) {
-      $this->map_settings = array_merge($this->map_settings, (array)$this->center);
-    }
   }
 
   static public $assets = array(
@@ -24,7 +20,17 @@
     )
   );
 
+  public function defaults () {
+    if (isset($this->center) && is_array($this->center)) {
+      $this->center = array_merge($this->map_settings, $this->center);
+    } else {
+      $this->center = $this->map_settings;
+    }
+  }
+
   public function content () {
+    $this->defaults();
+
     $field = new Brick('div');
     $field->addClass('field-multipart field-place cf');
 
@@ -102,7 +108,7 @@
 
     # Combine & Ship It
     $lat_content->append($lat_input);
-    
+
     return $lat_content;
   }
 
@@ -131,7 +137,7 @@
     # Wrapper
     $map_content = new Brick('div');
     $map_content->addClass('field-content field-google-map-ui');
-    $map_content->data($this->map_settings);
+    $map_content->data($this->center);
 
     return $map_content;
   }
