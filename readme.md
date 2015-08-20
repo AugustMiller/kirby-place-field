@@ -68,7 +68,7 @@ You can manually cast the field to a string (`(string)$page->location()`), then 
 I've also written a [custom `json` field method](https://gist.github.com/AugustMiller/2c3fe124d272541ff353) to handle decoding in a more automatic fashion. With the field method added to `site/plugins`, you can retrieve pieces of place data like this:
 
 ```php
-$page->location->json('address');
+$page->location()->json('address');
 ```
 
 Properties `address`, `lat` and `lng` exist in the decoded JSON object. If no property is passed to the field method, an associative array is returned, with all three elements.
