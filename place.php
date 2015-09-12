@@ -1,9 +1,20 @@
 <?php class PlaceField extends TextField {
   public function __construct() {
+
+    # Load Language Files
+    $baseDir = __DIR__ . DS . 'languages' . DS;
+    $lang    = panel()->language();
+    if (file_exists($baseDir . $lang . '.php')) {
+        require $baseDir . $lang . '.php';
+    } else {
+        require $baseDir . 'en.php';
+    }
+
+    # Field Options
     $this->type = 'place';
     $this->icon = 'map-marker';
-    $this->label = l::get('fields.place.label', 'Place');
-    $this->placeholder = l::get('fields.place.placeholder', 'Address or Location');
+    $this->label = l('fields.place.label');
+    $this->placeholder = l('fields.place.placeholder');
     $this->map_settings = array(
       'lat' => c::get('place.defaults.lat', 43.9),
       'lng' => c::get('place.defaults.lng', -120.2291901),
@@ -83,7 +94,7 @@
     # Button
     $search_button = new Brick('input');
     $search_button->attr('type', 'button');
-    $search_button->val(l::get('fields.place.locate', 'Locate'));
+    $search_button->val(l('fields.place.locate'));
     $search_button->addClass('btn btn-rounded locate-button');
 
     # Combine & Ship It
@@ -103,7 +114,7 @@
     $lat_input->attr('tabindex', '-1');
     $lat_input->attr('readonly', true);
     $lat_input->addClass('input input-split-left input-is-readonly place-lat');
-    $lat_input->attr('placeholder', l::get('fields.place.latitude', 'Latitude'));
+    $lat_input->attr('placeholder', l('fields.place.latitude'));
     $lat_input->val($this->pick('lat'));
 
     # Combine & Ship It
@@ -123,7 +134,7 @@
     $lng_input->attr('tabindex', '-1');
     $lng_input->attr('readonly', true);
     $lng_input->addClass('input input-split-right input-is-readonly place-lng');
-    $lng_input->attr('placeholder', l::get('fields.place.longitude', 'Longitude'));
+    $lng_input->attr('placeholder', l('fields.place.longitude'));
     $lng_input->val($this->pick('lng'));
 
     # Combine & Ship It
