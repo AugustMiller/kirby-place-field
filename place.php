@@ -136,7 +136,7 @@
   public function map () {
     # Wrapper
     $map_content = new Brick('div');
-    $map_content->addClass('field-content field-google-map-ui');
+    $map_content->addClass('field-content field-google-map-ui input');
     $map_content->data($this->center);
 
     return $map_content;
