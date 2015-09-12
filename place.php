@@ -46,8 +46,8 @@
     $field->addClass('field-multipart field-place cf');
 
     # Add each
+    $field->append($this->headline());
     $field->append($this->input_location());
-    $field->append($this->button_search());
     $field->append($this->map());
     $field->append($this->input_lat());
     $field->append($this->input_lng());
@@ -85,22 +85,31 @@
     return $location_container;
   }
 
-  # Search Button
-  private function button_search () {
-    # Wrapper
-    $search_container = new Brick('div');
-    $search_container->addClass('field-content input-search input-button');
+  # Unset the default label
+  public function label() {
+    return null;
+  }
 
-    # Button
-    $search_button = new Brick('input');
-    $search_button->attr('type', 'button');
-    $search_button->val(l('fields.place.locate'));
-    $search_button->addClass('btn btn-rounded locate-button');
+  # Headline & Search Button
+  public function headline() {
 
-    # Combine & Ship It
-    $search_container->append($search_button);
+    if(!$this->readonly) {
 
-    return $search_container;
+      $add = new Brick('a');
+      $add->html('<i class="icon icon-left fa fa-search"></i>' . l('fields.place.locate'));
+      $add->addClass('locate-button label-option');
+      $add->attr('#');
+
+    } else {
+      $add = null;
+    }
+
+    $label = parent::label();
+    $label->addClass('structure-label');
+    $label->append($add);
+
+    return $label;
+
   }
 
   # Latitude Input
