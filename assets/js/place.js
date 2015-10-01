@@ -1,4 +1,4 @@
-(function ($) {
+;(function ($) {
   var MapManager, PlaceField;
 
   window.Fields = window.Fields || {};
