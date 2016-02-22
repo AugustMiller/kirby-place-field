@@ -141,8 +141,8 @@
     store: function () {
       this.field.val(JSON.stringify({
         address: this.location_fields.address.val(),
-        lat: this.location_fields.lat.val(),
-        lng: this.location_fields.lng.val()
+        lat: parseFloat(this.location_fields.lat.val()),
+        lng: parseFloat(this.location_fields.lng.val())
       }));
     }
   }

@@ -1,10 +1,10 @@
 # Place Field
 
-> Please be aware that this field plugin is under development and is not recommended for use in production environments. Breaking changes may be made to the way it saves and restores data.
-
 I've found that adding location data to [Kirby CMS](http://getkirby.com) forms to be super useful.
 
 Unfortunately, this isn't one of the many fields available to us, out of the box.
+
+> Please note that the Place Field was [recently updated](https://github.com/AugustMiller/kirby-place-field/tree/1.0) to store data in YAML instead of JSON. The internals of this new storage method are still under development, so you may want to check out the [original 0.1 release](https://github.com/AugustMiller/kirby-place-field/tree/0.1).
 
 ## Features
 - Familiar Google Maps UI
@@ -61,14 +61,19 @@ These options will be overridden by any set on individual fields. Without either
 
 ## Usage
 
-The Place Field stores data in JSON.
+The Place Field stores data in YAML.
 
-You can manually cast the field to a string (`(string)$page->location()`), then use PHP's `json_decode()` function to return an associative array.
+You must manually transform the field to an associative array by calling the [`yaml` field method](https://getkirby.com/docs/cheatsheet/field-methods/yaml).
 
-I've also written a [custom `json` field method](https://gist.github.com/AugustMiller/2c3fe124d272541ff353) to handle decoding in a more automatic fashion. With the field method added to `site/plugins`, you can retrieve pieces of place data like this:
+The resulting array can be used just like any other:
 
 ```php
-$page->location()->json('address');
+$page->location()->yaml()['lat'];
+// Or!
+$location = $page->location()->yaml();
+echo $location['lng']; # => -122.67648159999999
 ```
 
-Properties `address`, `lat` and `lng` exist in the decoded JSON object. If no property is passed to the field method, an associative array is returned, with all three elements.
+Properties `address`, `lat` and `lng` should exist in the decoded object, but may be empty.
+
+:deciduous_tree:

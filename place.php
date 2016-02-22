@@ -169,15 +169,20 @@
   }
 
   public function value() {
-    # Convert JSON String to Array
-    return (array)json_decode($this->value);
+    # Convert YAML "string" to Array
+    return (array)yaml::decode($this->value);
   }
 
   public function result() {
-    # Get Incoming Data, decode and re-encode.
-    # This format may change, so this method will allow us to shim in more config options for storage, later. (YAML?)
-    $result = parent::result();
-    $data = json_decode($result);
-    return json_encode($data);
+    # Get Incoming data (Serialized JSON)
+    $input = parent::result();
+
+    # Decode
+    $data = json_decode($input);
+
+    # Re-encode for human-readability in content files
+    return yaml::encode($data);
+
+    # This ends up as a text block when stored inside a Structure field. Really, it's plain text anywhere it's stored— but the effect is only noticeable there. The truth is that Structure fields are stored as "plain text," as-is, which may be the only way to legitimately implement nested structures For example, how do we "stop" YAML from being parsed at a certain hierarchical level?
   }
 }
