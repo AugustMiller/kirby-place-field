@@ -76,4 +76,6 @@ echo $location['lng']; # => -122.67648159999999
 
 Properties `address`, `lat` and `lng` should exist in the decoded object, but may be empty.
 
+Kirby creator Bastian Allgeier recently created the [Geo Plugin](https://github.com/getkirby-plugins/geo-plugin), which is a great toolkit for working with coordinates. Check it out!
+
 :deciduous_tree:
