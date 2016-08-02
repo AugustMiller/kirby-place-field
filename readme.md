@@ -1,4 +1,4 @@
-**Attention:** _As of August 8, 2016, I no longer be maintaining this plugin! Please use the new Map Field plugin, which will continue to recieve support._
+**Attention:** _As of August 8, 2016, I am no longer be maintaining this plugin! Please use the new Map Field plugin, which will continue to recieve support._
 
 # Place Field
 
