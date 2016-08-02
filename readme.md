@@ -1,3 +1,5 @@
+**Attention:** _As of August 8, 2016, I no longer be maintaining this plugin! Please use the new Map Field plugin, which will continue to recieve support._
+
 # Place Field
 
 I've found that adding location data to [Kirby CMS](http://getkirby.com) forms to be super useful.
