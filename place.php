@@ -1,9 +1,20 @@
 <?php class PlaceField extends TextField {
   public function __construct() {
+
+    # Load Language Files
+    $baseDir = __DIR__ . DS . 'languages' . DS;
+    $lang    = panel()->language();
+    if (file_exists($baseDir . $lang . '.php')) {
+        require $baseDir . $lang . '.php';
+    } else {
+        require $baseDir . 'en.php';
+    }
+
+    # Field Options
     $this->type = 'place';
     $this->icon = 'map-marker';
-    $this->label = l::get('fields.place.label', 'Place');
-    $this->placeholder = l::get('fields.place.placeholder', 'Address or Location');
+    $this->label = l('fields.place.label');
+    $this->placeholder = l('fields.place.placeholder');
     $this->map_settings = array(
       'lat' => c::get('place.defaults.lat', 43.9),
       'lng' => c::get('place.defaults.lng', -120.2291901),
@@ -35,8 +46,8 @@
     $field->addClass('field-multipart field-place cf');
 
     # Add each
+    $field->append($this->headline());
     $field->append($this->input_location());
-    $field->append($this->button_search());
     $field->append($this->map());
     $field->append($this->input_lat());
     $field->append($this->input_lng());
@@ -74,22 +85,31 @@
     return $location_container;
   }
 
-  # Search Button
-  private function button_search () {
-    # Wrapper
-    $search_container = new Brick('div');
-    $search_container->addClass('field-content input-search input-button');
+  # Unset the default label
+  public function label() {
+    return null;
+  }
 
-    # Button
-    $search_button = new Brick('input');
-    $search_button->attr('type', 'button');
-    $search_button->val(l::get('fields.place.locate', 'Locate'));
-    $search_button->addClass('btn btn-rounded locate-button');
+  # Headline & Search Button
+  public function headline() {
 
-    # Combine & Ship It
-    $search_container->append($search_button);
+    if(!$this->readonly) {
 
-    return $search_container;
+      $add = new Brick('a');
+      $add->html('<i class="icon icon-left fa fa-search"></i>' . l('fields.place.locate'));
+      $add->addClass('locate-button label-option');
+      $add->attr('#');
+
+    } else {
+      $add = null;
+    }
+
+    $label = parent::label();
+    $label->addClass('structure-label');
+    $label->append($add);
+
+    return $label;
+
   }
 
   # Latitude Input
@@ -103,7 +123,7 @@
     $lat_input->attr('tabindex', '-1');
     $lat_input->attr('readonly', true);
     $lat_input->addClass('input input-split-left input-is-readonly place-lat');
-    $lat_input->attr('placeholder', l::get('fields.place.latitude', 'Latitude'));
+    $lat_input->attr('placeholder', l('fields.place.latitude'));
     $lat_input->val($this->pick('lat'));
 
     # Combine & Ship It
@@ -123,7 +143,7 @@
     $lng_input->attr('tabindex', '-1');
     $lng_input->attr('readonly', true);
     $lng_input->addClass('input input-split-right input-is-readonly place-lng');
-    $lng_input->attr('placeholder', l::get('fields.place.longitude', 'Longitude'));
+    $lng_input->attr('placeholder', l('fields.place.longitude'));
     $lng_input->val($this->pick('lng'));
 
     # Combine & Ship It
